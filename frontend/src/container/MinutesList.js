@@ -2,6 +2,7 @@ import React, { Component } from "react";
 
 import Header from "../component/Header";
 import Footer from "../component/Footer";
+import Navigation from "../component/Navigation";
 
 import { Table, Text, Box } from "gestalt";
 import "gestalt/dist/gestalt.css";
@@ -29,42 +30,44 @@ class MinutesList extends Component {
     const { results } = this.state;
 
     return (
-      <div>
-        <Header />
-        <Box padding={10}>
-          <Table>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>
-                  <Text weight="bold">제목</Text>
-                </Table.HeaderCell>
-                <Table.HeaderCell>
-                  <Text weight="bold">작성자</Text>
-                </Table.HeaderCell>
-                <Table.HeaderCell>
-                  <Text weight="bold">날짜</Text>
-                </Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {results.map((result) => {
-                return (
-                  <Minute
-                    id={result.id}
-                    title={result.title}
-                    topic={result.topic}
-                    writer={result.writer}
-                    parties={result.parties}
-                    date={result.date}
-                    meeting_date={result.meeting_date}
-                    file={result.file}
-                  />
-                );
-              })}
-            </Table.Body>
-          </Table>
-        </Box>
-
+      <div class="bg wrapper">
+        <Navigation />
+        <div class="main-content">
+          <Box padding={10} width="70%" margin="auto">
+            <Table>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell>
+                    <Text weight="bold">제목</Text>
+                  </Table.HeaderCell>
+                  <Table.HeaderCell>
+                    <Text weight="bold">작성자</Text>
+                  </Table.HeaderCell>
+                  <Table.HeaderCell>
+                    <Text weight="bold">날짜</Text>
+                  </Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {results.reverse().map((result) => {
+                  return (
+                    <Minute
+                      id={result.id}
+                      title={result.title}
+                      topic={result.topic}
+                      writer={result.writer}
+                      parties={result.parties}
+                      date={result.date}
+                      meeting_date={result.meeting_date}
+                      file={result.file}
+                      image={result.photo}
+                    />
+                  );
+                })}
+              </Table.Body>
+            </Table>
+          </Box>
+        </div>
         <Footer />
       </div>
     );
@@ -72,7 +75,7 @@ class MinutesList extends Component {
 
   _renderMinute = async () => {
     await axios
-      .get("/testapp/api")
+      .get("/testapp/meeting")
       .then((response) => {
         this.setState({ results: response.data });
       })
